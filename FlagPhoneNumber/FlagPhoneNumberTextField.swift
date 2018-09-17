@@ -29,14 +29,14 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 	
 	/// The size of the leftView
 	private var leftViewSize: CGSize {
-		let width = flagSize.width + flagButtonEdgeInsets.left + flagButtonEdgeInsets.right + phoneCodeTextField.frame.width
+		let width = leftViewLeftMargin + flagSize.width + flagButtonEdgeInsets.left + flagButtonEdgeInsets.right + phoneCodeTextField.frame.width + leftViewRightMargin
 		let height = bounds.height
 
 		return CGSize(width: width, height: height)
 	}
 
-	var phoneCodeTextField: UITextField = UITextField()
-	lazy var countryPicker: FPNCountryPicker = FPNCountryPicker()
+	public var phoneCodeTextField: UITextField = UITextField()
+	public lazy var countryPicker: FPNCountryPicker = FPNCountryPicker()
 	private lazy var phoneUtil: NBPhoneNumberUtil = NBPhoneNumberUtil()
 	private var nbPhoneNumber: NBPhoneNumber?
 	private var formatter: NBAsYouTypeFormatter?
@@ -79,6 +79,7 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 	/// Input Accessory View for the texfield
 	public var textFieldInputAccessoryView: UIView?
 
+    // MARK: - init
 	
 	init() {
 		super.init(frame: .zero)
@@ -101,12 +102,15 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 	deinit {
 		parentViewController = nil
 	}
+    
+    // MARK: - layout
 	
 	open override func layoutSubviews() {
 		super.layoutSubviews()
 		
 		leftView?.frame = leftViewRect(forBounds: frame)
 		flagButton.imageEdgeInsets = flagButtonEdgeInsets
+        updateLeftViewConstraints()
 	}
 	
 	open override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
@@ -121,6 +125,7 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 		setupFlagButton()
 		setupPhoneCodeTextField()
 		setupLeftView()
+        updateLeftViewConstraints()
 		setupCountryPicker()
 
 		autocorrectionType = .no
@@ -150,16 +155,32 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 		leftView = UIView()
 		leftView?.addSubview(flagButton)
 		leftView?.addSubview(phoneCodeTextField)
-
-		let views = ["flag": flagButton, "textField": phoneCodeTextField]
-		let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[flag]-(0)-[textField]|", options: [], metrics: nil, views: views)
-
-		leftView?.addConstraints(horizontalConstraints)
-		
-		for key in views.keys {
-			leftView?.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[\(key)]|", options: [], metrics: nil, views: views))
-		}
 	}
+    
+    private var leftViewHorizontalConstraints: [NSLayoutConstraint] = []
+    private var leftViewVerticalConstraints: [[NSLayoutConstraint]] = []
+    
+    private func updateLeftViewConstraints() {
+        
+        if leftViewHorizontalConstraints.count > 0 {
+            leftView?.removeConstraints(leftViewHorizontalConstraints)
+        }
+        for constraints in leftViewVerticalConstraints {
+            leftView?.removeConstraints(constraints)
+        }
+        leftViewVerticalConstraints.removeAll()
+        
+        let views = ["flag": flagButton, "textField": phoneCodeTextField]
+        leftViewHorizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(leftViewLeftMargin)-[flag]-(0)-[textField]-\(leftViewRightMargin)-|", options: [], metrics: nil, views: views)
+        leftView?.addConstraints(leftViewHorizontalConstraints)
+        
+        for key in views.keys {
+            let constraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|[\(key)]|", options: [], metrics: nil, views: views)
+            leftView?.addConstraints(constraints)
+            leftViewVerticalConstraints.append(constraints)
+        }
+
+    }
 	
 	private func setupCountryPicker() {
 		countryPicker.countryPickerDelegate = self
@@ -195,7 +216,36 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 		resignFirstResponder()
 	}
 	
-	// - Public
+    // MARK: - margin
+    
+    public var textLeftMargin: CGFloat = 8.0
+    public var textRightMargin: CGFloat = 8.0
+    
+    override open func textRect( forBounds bounds: CGRect ) -> CGRect {
+        let leftViewW = self.leftViewSize.width
+        var inset: CGRect = CGRect(x: bounds.origin.x + self.textLeftMargin + leftViewW, y: bounds.origin.y, width: bounds.size.width - leftViewW - self.textLeftMargin - self.textRightMargin, height: bounds.size.height)
+        return inset
+    }
+    
+    override open func editingRect( forBounds bounds: CGRect ) -> CGRect {
+        let leftViewW = self.leftViewSize.width
+        var inset: CGRect = CGRect(x: bounds.origin.x + self.textLeftMargin + leftViewW, y: bounds.origin.y, width: bounds.size.width - leftViewW - self.textLeftMargin - self.textRightMargin, height: bounds.size.height)
+        return inset
+    }
+    
+    public var leftViewLeftMargin: CGFloat = 0.0 {
+        didSet(newValue) {
+            layoutSubviews()
+        }
+    }
+    public var leftViewRightMargin: CGFloat = 0.0 {
+        didSet(newValue) {
+            layoutSubviews()
+        }
+    }
+    
+    
+    // MARK: - Public
 
 	/// Set the country image according to country code. Example "FR"
 	public func setFlag(for regionCode: String) {

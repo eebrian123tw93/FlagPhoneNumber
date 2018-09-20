@@ -423,13 +423,31 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 	}
 	
 	// - FPNCountryPickerDelegate
-
+    private var countryName = ""
+    private var countryPhoneCode = ""
+    private var countryCode = ""
 	func countryPhoneCodePicker(_ picker: FPNCountryPicker, didSelectCountry country: FPNCountry) {
 		if let name = country.name, let dialCode = country.phoneCode, let code = country.code {
+            countryName = name
+            countryPhoneCode = dialCode
+            countryCode = code
 			flagPhoneNumberDelegate?.didSelectCountry(name: name, dialCode: dialCode, code: code)
 		}
 		selectedCountry = country
 	}
+    
+    // Gevin added
+    func getCountryName() -> String {
+        return countryName
+    }
+    
+    func getCountryCode() -> String {
+        return countryCode
+    }
+    
+    func getPhoneCountryCode() -> String {
+        return countryPhoneCode
+    }
 
 	// - FPNTextFieldDelegate
 	

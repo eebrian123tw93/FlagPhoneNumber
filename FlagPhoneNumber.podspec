@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-s.name             = 'FlagPhoneNumber_Gevin'
+s.name             = 'FlagPhoneNumber'
 s.version          = '0.6.0'
 s.summary          = 'A formatted phone number UITextField with country flag picker.'
 

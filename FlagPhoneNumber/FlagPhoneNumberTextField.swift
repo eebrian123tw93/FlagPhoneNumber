@@ -437,15 +437,15 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 	}
     
     // Gevin added
-    func getCountryName() -> String {
+    public func getCountryName() -> String {
         return countryName
     }
     
-    func getCountryCode() -> String {
+    public func getCountryCode() -> String {
         return countryCode
     }
     
-    func getPhoneCountryCode() -> String {
+    public func getPhoneCountryCode() -> String {
         return countryPhoneCode
     }
 

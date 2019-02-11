@@ -31,7 +31,8 @@ s.source           = { :git => 'https://github.com/gevin/FlagPhoneNumber.git' }
 s.ios.deployment_target = '8.0'
 
 s.source_files = 'FlagPhoneNumber/**/*.swift'
-s.resource_bundles = {'FlagPhoneNumber' => ['FlagPhoneNumber/Resources/**/*']}
+s.resource = {'FlagPhoneNumber' => ['FlagPhoneNumber/Resources/**/*']}
+#s.resource_bundles = {'FlagPhoneNumber' => ['FlagPhoneNumber/Resources/**/*']}
 #s.resource_bundles = {'FlagPhoneNumber' => ['FlagPhoneNumber/Assets/*']}
 
 # s.public_header_files = 'Pod/Classes/**/*.h'

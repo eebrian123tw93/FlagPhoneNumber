@@ -77,7 +77,7 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 	public var parentViewController: UIViewController?
 	
 	/// Input Accessory View for the texfield
-	public var textFieldInputAccessoryView: UIView?
+//    public var textFieldInputAccessoryView: UIView?
 
     // MARK: - init
 	
@@ -192,7 +192,7 @@ open class FPNTextField: UITextField, UITextFieldDelegate, FPNCountryPickerDeleg
 	@objc private func displayNumberKeyBoard() {
 		keyboardType = .numberPad
 		inputView = nil
-		inputAccessoryView = textFieldInputAccessoryView
+//        inputAccessoryView = textFieldInputAccessoryView
 		tintColor = .gray
 		reloadInputViews()
 	}

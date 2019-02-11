@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
 s.name             = 'FlagPhoneNumber'
-s.version          = '0.6.0'
+s.version          = '0.6.1'
 s.summary          = 'A formatted phone number UITextField with country flag picker.'
 
 # This description is used to generate tags and improve search results.
@@ -31,11 +31,8 @@ s.source           = { :git => 'https://github.com/gevin/FlagPhoneNumber.git' }
 s.ios.deployment_target = '8.0'
 
 s.source_files = 'FlagPhoneNumber/**/*.swift'
-s.resource_bundles = {'FlagPhoneNumber' => ['FlagPhoneNumber/Resources/**/*']}
-
-#s.resource_bundles = {
-#'FlagPhoneNumber' => ['FlagPhoneNumber/Assets/*']
-#}
+#s.resource_bundles = {'FlagPhoneNumber' => ['FlagPhoneNumber/Resources/**/*']}
+s.resource_bundles = {'FlagPhoneNumber' => ['FlagPhoneNumber/Assets/*']}
 
 # s.public_header_files = 'Pod/Classes/**/*.h'
 # s.frameworks = 'UIKit', 'MapKit'
